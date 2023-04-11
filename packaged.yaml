@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: sam-demo
+Resources:
+  TranslateLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: translate-function-2
+      CodeUri: s3://demo20230411/60e42ac6f9b6a17d45437fb34bdf2d2b
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Timeout: 5
+      MemorySize: 256
+      Policies:
+      - TranslateFullAccess
+      - AmazonDynamoDBFullAccess
+      Events:
+        GetApi:
+          Type: Api
+          Properties:
+            Path: /translate
+            Method: get
+            RestApiId:
+              Ref: TranslateAPI
+  TranslateAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: translate-api-2
+      StageName: dev
+      EndpointConfiguration: REGIONAL
+  TranslateDynamoDbTbl:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: translate-history-2
+      PrimaryKey:
+        Name: timestamp
+        Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
