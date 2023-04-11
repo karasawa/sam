@@ -6,7 +6,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: translate-function-2
-      CodeUri: ./hello_world/
+      CodeUri: ./function/
       Handler: app.lambda_handler
       Runtime: python3.9
       Timeout: 5
